@@ -48,6 +48,6 @@ nav a.router-link-exact-active {
 
 .container{
   width: 100%;
-  margin: 0 auto;
+  margin: 1rem auto 0 auto;
 }
 </style>

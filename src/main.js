@@ -3,7 +3,9 @@ import App from './App.vue'
 import router from './router'
 import 'bootstrap/dist/css/bootstrap.css';
 import 'bootstrap-vue/dist/bootstrap-vue.css';
+import 'bootstrap-vue/dist/bootstrap-vue-icons.min.css'
 import BootstrapVue from 'bootstrap-vue';
+import { BootstrapVueIcons } from 'bootstrap-vue'
 import VueApollo from 'vue-apollo';
 import { ApolloClient, InMemoryCache, HttpLink } from '@apollo/client/core';
 
@@ -23,6 +25,7 @@ const apolloProvider = new VueApollo({
   defaultClient: apolloClient,
 });
 Vue.use(BootstrapVue);
+Vue.use(BootstrapVueIcons)
 
 Vue.config.productionTip = false
 
