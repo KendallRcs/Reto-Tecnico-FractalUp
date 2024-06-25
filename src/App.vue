@@ -1,12 +1,20 @@
 <template>
   <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav>
+    <SideBar/>
     <router-view/>
   </div>
 </template>
+
+<script>
+import SideBar from './components/SideBar.vue'
+
+export default {
+  name: 'App',
+  components: {
+    SideBar
+  }
+}
+</script>
 
 <style>
 #app {
@@ -15,6 +23,9 @@
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  display: flex;
+  flex-direction: row;
+  background-color: #c6f4ff;
 }
 
 nav {
@@ -24,9 +35,19 @@ nav {
 nav a {
   font-weight: bold;
   color: #2c3e50;
+  text-decoration: none;
 }
 
 nav a.router-link-exact-active {
-  color: #42b983;
+  color: black;
+  font-weight: bold;
+  padding: 2rem;
+  background-color: white;
+  border-radius: 15px;
+}
+
+.container{
+  width: 100%;
+  margin: 0 auto;
 }
 </style>
