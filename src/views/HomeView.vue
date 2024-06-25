@@ -2,7 +2,7 @@
   <div class="home container">
     <div class="searchbar">
       <b-form-input v-model="text" type="search" placeholder="Ingrese el nombre del país"></b-form-input>
-      <b-button variant="primary" class="d-flex">
+      <b-button variant="primary" class="d-flex" @click="searchCountry()">
         <b-icon icon="search" aria-hidden="true" style="margin-right: 5px;"></b-icon> Buscar
       </b-button>
     </div>
@@ -98,6 +98,60 @@ const allCountries = gql`
     }
   }
 `;
+const countriesFiltered = gql`
+  {
+    countries {
+      capital
+      code
+      continent {
+        code
+        name
+      }
+      currencies
+      currency
+      emoji
+      emojiU
+      languages {
+        code
+        name
+        native
+        rtl
+      }
+      name
+      states {
+        code
+        name
+      }
+    }
+  }
+`;
+/* const countriesFiltered = gql`
+  query getCountriesFiltered($name: String!) {
+    countries(filter: { name: { in: [$name] } }) {
+      capital
+      code
+      continent {
+        code
+        name
+      }
+      currencies
+      currency
+      emoji
+      emojiU
+      languages {
+        code
+        name
+        native
+        rtl
+      }
+      name
+      states {
+        code
+        name
+      }
+    }
+  }
+`; */
 
 export default {
   name: 'HomeView',
@@ -187,6 +241,31 @@ export default {
         console.error('Error:', error);
       }
     },
+    async searchCountry() {
+      try {
+        const result = await this.$apollo.query({
+          query: countriesFiltered,
+        });
+        this.countries = result.data.countries.filter(country => country.name.toLowerCase().includes(this.text.toLowerCase()));
+        console.log('Countries:', this.countries);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    }
+
+    /* INTENTANDO FILTRAR CON APOLLO */
+    /* async searchCountry() {
+      try {
+        const result = await this.$apollo.query({
+          query: countriesFiltered,
+          variables: { name: this.text }
+        });
+        this.countries = result.data.countries
+        console.log('Countries:', this.countries);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    } */
   },
   mounted() {
     this.getAllCountries();
