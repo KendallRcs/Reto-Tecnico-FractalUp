@@ -1,7 +1,7 @@
 <template>
   <div class="sidebar">
     <nav>
-      <img src="../assets/logo.png" class="logo">
+      <img src="../assets/img/logo.png" class="logo">
       <router-link to="/" class="link"><span>Home</span></router-link>
       <router-link to="/second" class="link">Segunda</router-link>
       <router-link to="/third" class="link">Tercera</router-link>
