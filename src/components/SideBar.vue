@@ -16,12 +16,18 @@ export default {
 </script>
 
 <style scoped>
-.sidebar{
-  
+.sidebar {
   width: 25vw;
   height: 100vh;
   background-color: #009cff;
   box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 nav {
   display: flex;

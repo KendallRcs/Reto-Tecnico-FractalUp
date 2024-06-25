@@ -215,6 +215,21 @@ export default {
         return '';
       }
     },
+    /* async getCountryImageSideBar(country) {
+      try {
+        const response = await axios.get('https://pixabay.com/api/', {
+          params: {
+            q: `Flag ${country} `,
+            key: '44606562-5cd1aa7f9c3be6b83f9f0b55a',
+            image_type: 'photo'
+          }
+        });
+        return response.data.hits[0]?.webformatURL || '';
+      } catch (error) {
+        console.error('Error fetching image:', error);
+        return '';
+      }
+    }, */
     async getAllCountries() {
       try {
         const result = await this.$apollo.query({

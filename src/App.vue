@@ -1,7 +1,9 @@
 <template>
   <div id="app">
     <SideBar/>
-    <router-view/>
+    <div class="main-content">
+      <router-view/>
+    </div>
   </div>
 </template>
 
@@ -24,7 +26,8 @@ export default {
   text-align: center;
   color: #2c3e50;
   display: flex;
-  flex-direction: row;
+  height: 100vh;
+  overflow: hidden;
   background-color: #c6f4ff;
 }
 
@@ -45,7 +48,12 @@ nav a.router-link-exact-active {
   background-color: white;
   border-radius: 15px;
 }
-
+.main-content {
+  width: 75vw;
+  margin-left: 25vw;
+  overflow-y: auto;
+  padding: 1rem;
+}
 .container{
   width: 100%;
   margin: 1rem auto 0 auto;
