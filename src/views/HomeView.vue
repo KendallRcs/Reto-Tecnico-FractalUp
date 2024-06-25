@@ -35,7 +35,7 @@
         <p><strong>Continente:</strong> {{ selectedCountry.continent.code }} - {{ selectedCountry.continent.name }}</p>
         <p><strong>Monedas:</strong> {{ selectedCountry.currency }}</p>
         <p><strong>Idiomas:</strong> {{ selectedCountry.languages.map(lang => lang.name).join(', ') }}</p>
-        <p><strong>Estados:</strong> {{ selectedCountry.states.map(state => state.name).join(', ') }}</p>
+        <p v-if="selectedCountry.states.length > 0"><strong>Estados:</strong> {{ selectedCountry.states.map(state => state.name).join(', ') }}</p>
       </div>
     </b-sidebar>
   </div>
@@ -71,45 +71,44 @@ const countryClicked = gql`
     }
   }
 `;
+const allCountries = gql`
+  {
+    countries {
+      capital
+      code
+      continent {
+        code
+        name
+      }
+      currencies
+      currency
+      emoji
+      emojiU
+      languages {
+        code
+        name
+        native
+        rtl
+      }
+      name
+      states {
+        code
+        name
+      }
+    }
+  }
+`;
 
 export default {
   name: 'HomeView',
-  /* apollo: {
-    country: gql`
-      {
-        country(code: "US") {
-          capital
-          code
-          continent {
-            code
-            name
-          }
-          currencies
-          currency
-          emoji
-          emojiU
-          languages {
-            code
-            name
-            native
-            rtl
-          }
-          name
-          states {
-            code
-            name
-          }
-        }
-      }
-    `
-  }, */
+  
   data() {
     return {
       data: null,
       text: '',
       selectedCountry: null,
       sidebarVisible: false,
-      countries: [
+      /* countries: [
         {
           name: 'Argentina',
           code: 'AR',
@@ -159,10 +158,22 @@ export default {
             name: 'America'
           }
         }
-      ],
+      ], */
+      countries: []
     }
   },
   methods: {
+    async getAllCountries() {
+      try {
+        const result = await this.$apollo.query({
+          query: allCountries,
+        });
+        this.countries = result.data.countries;
+        console.log('Countries:', this.countries);
+      } catch (error) {
+        console.error('Error:', error);
+      }
+    },
     async getCountry(code) {
       try {
         const result = await this.$apollo.query({
@@ -170,14 +181,15 @@ export default {
           variables: { code: code }
         });
         this.selectedCountry = result.data.country;
+        console.log('Country:', this.selectedCountry);
         this.sidebarVisible = true;
       } catch (error) {
         console.error('Error:', error);
       }
-    }
+    },
   },
   mounted() {
-    
+    this.getAllCountries();
   },
   components: {
   }
