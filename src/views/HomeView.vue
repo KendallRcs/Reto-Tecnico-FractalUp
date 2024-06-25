@@ -31,7 +31,7 @@
         v-for="(item, index) in countries"
         :key="index"
         :title="item.name"
-        img-src="https://picsum.photos/600/300/?image=25"
+        :img-src="item.imageUrl"
         img-alt="Image"
         img-top
         tag="article"
@@ -48,7 +48,8 @@
 
     <b-sidebar id="sidebar-1" shadow :visible="sidebarVisible" @hidden="sidebarVisible = false" right>
       <div class="px-3 py-2" v-if="selectedCountry">
-        <h3>{{ selectedCountry.name }}</h3>
+        <img :src="selectedCountry.imageUrl" alt="Country Image" class="country-card-image">
+        <h3 class="mt-2">{{ selectedCountry.name }}</h3>
         <p><strong>Capital:</strong> {{ selectedCountry.capital }}</p>
         <p><strong>Continente:</strong> {{ selectedCountry.continent.code }} - {{ selectedCountry.continent.name }}</p>
         <p><strong>Monedas:</strong> {{ selectedCountry.currency }}</p>
@@ -61,7 +62,7 @@
 
 <script>
 import gql from 'graphql-tag';
-
+import axios from 'axios';
 const countryClicked = gql`
   query Country($code: ID!){
     country(code: $code) {
@@ -199,6 +200,21 @@ export default {
           break;
       }
     },
+    async getCountryImage(country) {
+      try {
+        const response = await axios.get('https://pixabay.com/api/', {
+          params: {
+            q: country,
+            key: '44606562-5cd1aa7f9c3be6b83f9f0b55a',
+            image_type: 'photo'
+          }
+        });
+        return response.data.hits[0]?.webformatURL || '';
+      } catch (error) {
+        console.error('Error fetching image:', error);
+        return '';
+      }
+    },
     async getAllCountries() {
       try {
         const result = await this.$apollo.query({
@@ -206,6 +222,11 @@ export default {
         });
         this.countries = result.data.countries;
         console.log('Countries:', this.countries);
+        
+        this.countries = await Promise.all(this.countries.map(async country => {
+          const imageUrl = await this.getCountryImage(country.name);
+          return { ...country, imageUrl };
+        }));
       } catch (error) {
         console.error('Error:', error);
       }
@@ -217,6 +238,8 @@ export default {
           variables: { code: code }
         });
         this.selectedCountry = result.data.country;
+        const imageUrl = await this.getCountryImage(this.selectedCountry.name);
+        this.selectedCountry = { ...this.selectedCountry, imageUrl };
         console.log('Country:', this.selectedCountry);
         this.sidebarVisible = true;
       } catch (error) {
@@ -232,6 +255,10 @@ export default {
         if(this.selectedContinents.length > 0) {
           this.countries = this.countries.filter(country => this.selectedContinents.includes(country.continent.name));
         }
+        this.countries = await Promise.all(this.countries.map(async country => {
+          const imageUrl = await this.getCountryImage(country.name);
+          return { ...country, imageUrl };
+        }));
         console.log('Countries:', this.countries);
       } catch (error) {
         console.error('Error:', error);
@@ -292,7 +319,17 @@ export default {
 .continent-card-image{
   height: 115px;
   object-fit: cover;
-
+}
+.country-card-image{
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 15px;
+}
+.card-img-top{
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
 }
 .buttons {
   display: flex;
