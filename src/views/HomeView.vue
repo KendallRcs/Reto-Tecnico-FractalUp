@@ -360,7 +360,8 @@ export default {
     align-items: center;
   }
   .country-card{
-    width: 100%;
+    width: 80vw !important;
+    max-width: 80vw !important;
   }
   .filter-menu {
     width: 95vw;

@@ -1,9 +1,9 @@
 <template>
   <div>
+    <b-button class="menu-btn" @click="toggleSidebar()">
+      <b-icon icon="list"></b-icon>
+    </b-button>
     <div class="sidebar">
-      <b-button class="hamburger-icon menu-btn" @click="toggleSidebar()">
-        &#9776;
-      </b-button>
       <nav>
         <img src="../assets/img/logo.png" class="logo">
         <router-link to="/" class="link"><span>Home</span></router-link>
@@ -15,13 +15,13 @@
     <div class="sidebar-responsive hidden">
       
       <nav v-if="isSidebarVisible">
-        <b-button class="x-icon" @click="toggleSidebar()">
-          &#9776;
+        <b-button @click="toggleSidebar()">
+          <b-icon icon="x-lg"></b-icon>
         </b-button>
         <img src="../assets/img/logo.png" class="logo">
-        <router-link to="/" class="link"><span>Home</span></router-link>
-        <router-link to="/second" class="link">Segunda</router-link>
-        <router-link to="/third" class="link">Tercera</router-link>
+        <router-link to="/" class="link"><span @click="toggleSidebar()">Home</span></router-link>
+        <router-link to="/second" class="link"><span @click="toggleSidebar()">Segunda</span></router-link>
+        <router-link to="/third" class="link"><span @click="toggleSidebar()">Tercera</span></router-link>
       </nav>
     </div>
   </div>
@@ -32,11 +32,23 @@ export default {
   name: 'SideBar',
   data() {
     return {
-      isSidebarVisible: false
+      isSidebarVisible: false,
+      showMenu: false
     }
   },
   methods: {
     toggleSidebar() {
+      console.log("toggleSidebar")
+      const sidebar = document.querySelector('.sidebar-responsive')
+      if(sidebar){
+        if (!this.showMenu) {
+          this.showMenu = !this.showMenu;
+          sidebar.classList.remove('hidden');
+        } else {
+          this.showMenu = !this.showMenu;
+          sidebar.classList.add('hidden');
+        }
+      }
       this.isSidebarVisible = !this.isSidebarVisible
     }
   }
@@ -101,11 +113,12 @@ a {
     display: none;
   }
   .menu-btn {
-    display: flex;
-  transition: all 0.3s ease;
-  z-index: 999;
-    justify-content: center;
-    align-items: center;
+    display: block;
+    position: fixed;
+    top: 25px;
+    left: 10px;
+    z-index: 999;
+    
   }
   .sidebar-responsive{
     display: block;
@@ -120,6 +133,10 @@ a {
     display: flex;
     flex-direction: column;
     gap: 1rem;
+    transition: all 0.6s ease;
+  }
+  .logo{
+    width: 40vw;
   }
 }
 </style>
