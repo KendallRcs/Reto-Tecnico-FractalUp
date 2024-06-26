@@ -8,7 +8,7 @@
     </div>
     <div class="home container">
       <div class="searchbar">
-        <b-form-input v-model="text" autocomplete="off" type="search" placeholder="Ingrese el nombre del país" @focus="openFilterContinent"></b-form-input>
+        <b-form-input v-model="text" autocomplete="off" type="search" placeholder="Ingrese el nombre del país" @focus="openFilterContinent" @keyup.enter="searchCountry(), closeFilterContinent()"></b-form-input>
         <b-button variant="primary" class="d-flex" @click="searchCountry(), closeFilterContinent()">
           <b-icon icon="search" aria-hidden="true" style="margin-right: 5px;"></b-icon> Buscar
         </b-button>
@@ -42,12 +42,11 @@
       img-alt="Image"
       img-top
       tag="article"
-      style="max-width: 20rem;"
       class="mb-2 country-card"
       @click="getCountry(item.code)"
       >
         <b-card-text>
-          <p>{{ item.code }}</p>
+          <p><img :src="`https://flagsapi.com/${item.code}/flat/64.png`" style="margin-right: 1rem;"/>{{ item.code }}</p>
           <p>{{ item.continent.name }}</p>
         </b-card-text>
       </b-card>
@@ -58,7 +57,8 @@
     <b-sidebar id="sidebar-1" shadow :visible="sidebarVisible" @hidden="sidebarVisible = false" right>
       <div class="px-3 py-2" v-if="selectedCountry">
         <img :src="selectedCountry.imageUrl" alt="Country Image" class="country-card-image">
-        <h3 class="mt-2">{{ selectedCountry.name }}</h3>
+        <h3 class="mt-2"><img :src="`https://flagsapi.com/${selectedCountry.code}/flat/64.png`">
+          {{ selectedCountry.name }}</h3>
         <p><strong>Capital:</strong> {{ selectedCountry.capital }}</p>
         <p><strong>Continente:</strong> {{ selectedCountry.continent.code }} - {{ selectedCountry.continent.name }}</p>
         <p><strong>Monedas:</strong> {{ selectedCountry.currency }}</p>
@@ -392,8 +392,7 @@ export default {
     align-items: center;
   }
   .country-card{
-    width: 80vw !important;
-    max-width: 80vw !important;
+    width: 80vw;
   }
   .filter-menu {
     width: 95vw;
