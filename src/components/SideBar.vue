@@ -1,17 +1,45 @@
 <template>
-  <div class="sidebar">
-    <nav>
-      <img src="../assets/img/logo.png" class="logo">
-      <router-link to="/" class="link"><span>Home</span></router-link>
-      <router-link to="/second" class="link">Segunda</router-link>
-      <router-link to="/third" class="link">Tercera</router-link>
-    </nav>
+  <div>
+    <div class="sidebar">
+      <b-button class="hamburger-icon menu-btn" @click="toggleSidebar()">
+        &#9776;
+      </b-button>
+      <nav>
+        <img src="../assets/img/logo.png" class="logo">
+        <router-link to="/" class="link"><span>Home</span></router-link>
+        <router-link to="/second" class="link">Segunda</router-link>
+        <router-link to="/third" class="link">Tercera</router-link>
+      </nav>
+    </div>
+
+    <div class="sidebar-responsive hidden">
+      
+      <nav v-if="isSidebarVisible">
+        <b-button class="x-icon" @click="toggleSidebar()">
+          &#9776;
+        </b-button>
+        <img src="../assets/img/logo.png" class="logo">
+        <router-link to="/" class="link"><span>Home</span></router-link>
+        <router-link to="/second" class="link">Segunda</router-link>
+        <router-link to="/third" class="link">Tercera</router-link>
+      </nav>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: 'SideBar',
+  data() {
+    return {
+      isSidebarVisible: false
+    }
+  },
+  methods: {
+    toggleSidebar() {
+      this.isSidebarVisible = !this.isSidebarVisible
+    }
+  }
 }
 </script>
 
@@ -54,5 +82,44 @@ li {
 }
 a {
   color: white;
+}
+.sidebar-responsive{
+  display: none;
+}
+.hidden {
+  transform: translateX(-1000px) !important;
+  transition: all 0.6s ease;
+}
+.menu-btn {
+  display: none;
+  cursor: pointer;
+  padding: 10px;
+  transition: all 0.3s ease;
+}
+@media screen and (max-width: 768px){
+  .sidebar{
+    display: none;
+  }
+  .menu-btn {
+    display: flex;
+  transition: all 0.3s ease;
+  z-index: 999;
+    justify-content: center;
+    align-items: center;
+  }
+  .sidebar-responsive{
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1000;
+    width: 100vw;
+    height: 100vh;
+    background-color: #009cff;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
 }
 </style>

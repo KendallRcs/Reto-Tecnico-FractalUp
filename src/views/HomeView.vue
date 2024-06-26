@@ -1,8 +1,8 @@
 <template>
   <div class="home container">
     <div class="searchbar">
-      <b-form-input v-model="text" type="search" placeholder="Ingrese el nombre del país" @focus="openFilterContinent"></b-form-input>
-      <b-button variant="primary" class="d-flex" @click="searchCountry">
+      <b-form-input v-model="text" autocomplete="off" type="search" placeholder="Ingrese el nombre del país" @focus="openFilterContinent"></b-form-input>
+      <b-button variant="primary" class="d-flex" @click="searchCountry(), closeFilterContinent()">
         <b-icon icon="search" aria-hidden="true" style="margin-right: 5px;"></b-icon> Buscar
       </b-button>
     </div>
@@ -36,7 +36,7 @@
         img-top
         tag="article"
         style="max-width: 20rem;"
-        class="mb-2"
+        class="mb-2 country-card"
         @click="getCountry(item.code)"
       >
         <b-card-text>
@@ -45,6 +45,8 @@
         </b-card-text>
       </b-card>
     </div>
+    
+    <p v-if="countries.length == 0">No se encontró país con los filtros solicitado</p>
 
     <b-sidebar id="sidebar-1" shadow :visible="sidebarVisible" @hidden="sidebarVisible = false" right>
       <div class="px-3 py-2" v-if="selectedCountry">
@@ -304,7 +306,7 @@ export default {
 }
 .filter-menu {
   position: absolute;
-  top: 60px;
+  top: 80px;
   left: 50%;
   transform: translateX(-50%);
   background: white;
@@ -349,5 +351,23 @@ export default {
 .buttons {
   display: flex;
   gap: 1rem;
+}
+@media screen and (max-width: 768px){
+  .countries{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  .country-card{
+    width: 100%;
+  }
+  .filter-menu {
+    width: 95vw;
+  }
+  .continents-container{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
 }
 </style>

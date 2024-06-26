@@ -58,4 +58,14 @@ nav a.router-link-exact-active {
   width: 100%;
   margin: 1rem auto 0 auto;
 }
+@media screen and (max-width: 768px) {
+  #app {
+    flex-direction: column;
+  }
+  .main-content {
+    width: 100%;
+    margin-left: 0;
+  }
+  
+}
 </style>
