@@ -1,21 +1,28 @@
 <template>
-  <div class="home container">
-    <div class="searchbar">
-      <b-form-input v-model="text" autocomplete="off" type="search" placeholder="Ingrese el nombre del país" @focus="openFilterContinent"></b-form-input>
-      <b-button variant="primary" class="d-flex" @click="searchCountry(), closeFilterContinent()">
-        <b-icon icon="search" aria-hidden="true" style="margin-right: 5px;"></b-icon> Buscar
-      </b-button>
+  <div>
+    <div class="header-responsive">
+      <div class="d-flex justify-content align-items-center">
+        <p class="h1 mb-2 menu-btn" style="font-size: 40px;" @click="callToggleSidebar()"><b-icon icon="list"></b-icon></p>
+      </div>
+      <img src="../assets/img/logo.png" class="logo-responsive">
     </div>
-
-    <div v-if="showFilterContinent" class="filter-menu">
-      <div class="continents-container">
-        <b-card
+    <div class="home container">
+      <div class="searchbar">
+        <b-form-input v-model="text" autocomplete="off" type="search" placeholder="Ingrese el nombre del país" @focus="openFilterContinent"></b-form-input>
+        <b-button variant="primary" class="d-flex" @click="searchCountry(), closeFilterContinent()">
+          <b-icon icon="search" aria-hidden="true" style="margin-right: 5px;"></b-icon> Buscar
+        </b-button>
+      </div>
+      
+      <div v-if="showFilterContinent" class="filter-menu">
+        <div class="continents-container">
+          <b-card
           v-for="continent in continents"
           :key="continent"
           class="continent-card"
           :class="{ selected: selectedContinents.includes(continent) }"
           @click="toggleContinent(continent)"
-        >
+          >
           <b-card-img :src="getImageSrc(continent)" alt="Continente Imagen" class="continent-card-image"></b-card-img>
           <b-card-text>{{ continent }}</b-card-text>
         </b-card>
@@ -25,19 +32,19 @@
         <b-button variant="secondary" @click="closeFilterContinent">Cerrar</b-button>
       </div>
     </div>
-
+    
     <div class="countries">
       <b-card
-        v-for="(item, index) in countries"
-        :key="index"
-        :title="item.name"
-        :img-src="item.imageUrl"
-        img-alt="Image"
-        img-top
-        tag="article"
-        style="max-width: 20rem;"
-        class="mb-2 country-card"
-        @click="getCountry(item.code)"
+      v-for="(item, index) in countries"
+      :key="index"
+      :title="item.name"
+      :img-src="item.imageUrl"
+      img-alt="Image"
+      img-top
+      tag="article"
+      style="max-width: 20rem;"
+      class="mb-2 country-card"
+      @click="getCountry(item.code)"
       >
         <b-card-text>
           <p>{{ item.code }}</p>
@@ -45,9 +52,9 @@
         </b-card-text>
       </b-card>
     </div>
-    
+  
     <p v-if="countries.length == 0">No se encontró país con los filtros solicitado</p>
-
+    
     <b-sidebar id="sidebar-1" shadow :visible="sidebarVisible" @hidden="sidebarVisible = false" right>
       <div class="px-3 py-2" v-if="selectedCountry">
         <img :src="selectedCountry.imageUrl" alt="Country Image" class="country-card-image">
@@ -60,18 +67,24 @@
       </div>
     </b-sidebar>
   </div>
+</div>
 </template>
 
 <script>
+import Vue from 'vue'
 import gql from 'graphql-tag';
 import axios from 'axios';
+import VueBus from 'vue-bus';
+
+Vue.use(VueBus);
+
 const countryClicked = gql`
-  query Country($code: ID!){
-    country(code: $code) {
-      capital
+query Country($code: ID!){
+  country(code: $code) {
+    capital
+    code
+    continent {
       code
-      continent {
-        code
         name
       }
       currencies
@@ -171,6 +184,7 @@ export default {
     },
     clearFilters() {
       this.selectedContinents = [];
+      this.showFilterContinent = false;
       this.searchCountry();
     },
     toggleContinent(continent) {
@@ -280,6 +294,9 @@ export default {
       } catch (error) {
         console.error('Error:', error);
       }
+    },
+    callToggleSidebar() {
+      this.$bus.$emit('toggleSidebar');
     }
   },
   mounted() {
@@ -364,6 +381,9 @@ export default {
   cursor: pointer;
   width: 160px;
 }
+.header-responsive{
+    display: none;
+}
 @media screen and (max-width: 768px){
   .countries{
     display: flex;
@@ -377,10 +397,26 @@ export default {
   }
   .filter-menu {
     width: 95vw;
+    top: 22vh;
   }
   .continents-container{
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  }
+  .header-responsive{
+    display: flex;
+    background-color: #009cff;
+    padding: 1rem;
+    height: 15vh;
+    position: sticky;
+    top: 0px;
+    width: 100vw;
+    z-index: 100;
+  }
+  .logo-responsive{
+    height: 100%;
+    margin: 0 auto;
+    display: block;
   }
 }
 </style>

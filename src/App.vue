@@ -52,7 +52,6 @@ nav a.router-link-exact-active {
   width: 75vw;
   margin-left: 25vw;
   overflow-y: auto;
-  padding: 1rem;
 }
 .container{
   width: 100%;

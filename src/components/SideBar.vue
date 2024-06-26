@@ -1,8 +1,6 @@
 <template>
   <div>
-    <b-button class="menu-btn" @click="toggleSidebar()">
-      <b-icon icon="list"></b-icon>
-    </b-button>
+    
     <div class="sidebar">
       <nav>
         <img src="../assets/img/logo.png" class="logo">
@@ -15,9 +13,8 @@
     <div class="sidebar-responsive hidden">
       
       <nav v-if="isSidebarVisible">
-        <b-button @click="toggleSidebar()">
-          <b-icon icon="x-lg"></b-icon>
-        </b-button>
+        <p class="h1 mb-2" style="font-size: 40px;" @click="toggleSidebar()"><b-icon icon="x-lg"></b-icon></p>
+
         <img src="../assets/img/logo.png" class="logo">
         <router-link to="/" class="link"><span @click="toggleSidebar()">Home</span></router-link>
         <router-link to="/second" class="link"><span @click="toggleSidebar()">Segunda</span></router-link>
@@ -51,6 +48,11 @@ export default {
       }
       this.isSidebarVisible = !this.isSidebarVisible
     }
+  },
+  created(){
+    this.$bus.on('toggleSidebar', () => {
+      this.toggleSidebar()
+    })
   }
 }
 </script>
@@ -124,7 +126,7 @@ a {
   .menu-btn {
     display: block;
     position: fixed;
-    top: 25px;
+    top: 40px;
     left: 10px;
     z-index: 999;
     
@@ -134,7 +136,7 @@ a {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1000;
+    z-index: 1000000;
     width: 100vw;
     height: 100vh;
     background-color: #009cff;
@@ -146,6 +148,9 @@ a {
   }
   .logo{
     width: 40vw;
+  }
+  span{
+    font-size: 25px;
   }
 }
 </style>
