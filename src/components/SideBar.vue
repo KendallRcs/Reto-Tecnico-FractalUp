@@ -108,6 +108,15 @@ a {
   padding: 10px;
   transition: all 0.3s ease;
 }
+.link{
+  transition: all 0.3s ease;
+}
+.link:hover{
+  background-color: white;
+  color: #009cff;
+  border-radius: 5px;
+
+}
 @media screen and (max-width: 768px){
   .sidebar{
     display: none;

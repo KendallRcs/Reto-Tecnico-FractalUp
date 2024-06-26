@@ -329,6 +329,7 @@ export default {
   width: 150px;
   border: 1px solid transparent;
   text-align: center;
+  transition: all 0.3s ease;
 }
 .continent-card.selected {
   border: 2px solid #009cff;
@@ -351,6 +352,17 @@ export default {
 .buttons {
   display: flex;
   gap: 1rem;
+}
+.country-card{
+  transition: all 0.3s ease;
+}
+.country-card:hover{
+  cursor: pointer;
+  margin: .5rem;
+}
+.continent-card:hover{
+  cursor: pointer;
+  width: 160px;
 }
 @media screen and (max-width: 768px){
   .countries{
