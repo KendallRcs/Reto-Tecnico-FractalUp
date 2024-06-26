@@ -52,7 +52,7 @@
       </b-card>
     </div>
   
-    <p v-if="countries.length == 0">No se encontró país con los filtros solicitado</p>
+    <p v-if="countries.length == 0"><strong>No se encontró país con los filtros solicitado</strong></p>
     
     <b-sidebar id="sidebar-1" shadow :visible="sidebarVisible" @hidden="sidebarVisible = false" right>
       <div class="px-3 py-2" v-if="selectedCountry">
@@ -132,9 +132,9 @@ const allCountries = gql`
     }
   }
 `;
-const countriesFiltered = gql`
-  {
-    countries {
+/* const countriesFiltered = gql`
+  query countries($name: [String!]) {
+    countries(filter: { name: {in: $name} }) {
       capital
       code
       continent {
@@ -158,7 +158,7 @@ const countriesFiltered = gql`
       }
     }
   }
-`;
+`; */
 
 export default {
   name: 'HomeView',
@@ -280,7 +280,7 @@ export default {
     async searchCountry() {
       try {
         const result = await this.$apollo.query({
-          query: countriesFiltered,
+          query: allCountries
         });
         this.countries = result.data.countries.filter(country => country.name.toLowerCase().includes(this.text.toLowerCase()));
         if(this.selectedContinents.length > 0) {
@@ -347,6 +347,7 @@ export default {
   border: 1px solid transparent;
   text-align: center;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 .continent-card.selected {
   border: 2px solid #009cff;
@@ -372,6 +373,7 @@ export default {
 }
 .country-card{
   transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
 }
 .country-card:hover{
   cursor: pointer;
